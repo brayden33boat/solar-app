@@ -62,8 +62,8 @@ export interface SolarDataState {
 }
 
 export interface SettingsState {
-    batteryVoltage: string;
-    batteryAhms: string;
+    batteryVoltage: number;
+    batteryAhms: number;
     batteryType: string;
-    shutOffTemp: string;
+    shutOffTemp: number;
 }

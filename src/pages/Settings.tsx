@@ -57,19 +57,17 @@ const Settings: React.FC = () => {
             <Text style={styles.label}>Battery Voltage</Text>
             <TextInput
                 style={styles.input}
-                value={localBatteryVoltage}
-                onChangeText={setLocalBatteryVoltage}
+                value={localBatteryVoltage.toString()}  // Ensure the value is a string for the TextInput
+                onChangeText={(text) => setLocalBatteryVoltage(parseFloat(text) || 0)}  // Convert the text to a number, defaulting to 0 if the conversion fails
                 keyboardType="numeric"
             />
-
             <Text style={styles.label}>Battery Ahms</Text>
             <TextInput
                 style={styles.input}
-                value={localBatteryAhms}
-                onChangeText={setLocalBatteryAhms}
+                value={localBatteryAhms.toString()}  // Ensure the value is a string for the TextInput
+                onChangeText={(text) => setLocalBatteryAhms(parseFloat(text) || 0)}  // Convert the text to a number, defaulting to 0 if the conversion fails
                 keyboardType="numeric"
             />
-
             <Text style={styles.label}>Battery Type</Text>
             <TouchableOpacity
                 style={styles.input}
@@ -100,10 +98,11 @@ const Settings: React.FC = () => {
             <Text style={styles.label}>Shut Off Temperature</Text>
             <TextInput
                 style={styles.input}
-                value={localShutOffTemp}
-                onChangeText={setLocalShutOffTemp}
+                value={localShutOffTemp.toString()}  // Ensure the value is a string for the TextInput
+                onChangeText={(text) => setLocalShutOffTemp(parseFloat(text) || 0)}  // Convert the text to a number, defaulting to 0 if the conversion fails
                 keyboardType="numeric"
             />
+
         </View>
     );
 };
