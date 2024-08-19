@@ -4,6 +4,10 @@ import { Provider } from 'react-redux';
 import App from './App';
 import { store } from './src/store';  // Assuming store.ts is in the same directory level
 import { name as appName } from './app.json';
+import { setupSocketIO } from './src/features/sensorSlice';
+
+// Set up the Socket.IO listener
+setupSocketIO(store.dispatch);
 
 const Main = () => (
   <Provider store={store}>
