@@ -1,4 +1,4 @@
-const {getDefaultConfig, mergeConfig} = require('@react-native/metro-config');
+import { getDefaultConfig, mergeConfig } from '@react-native/metro-config';
 
 /**
  * Metro configuration
@@ -6,16 +6,15 @@ const {getDefaultConfig, mergeConfig} = require('@react-native/metro-config');
  *
  * @type {import('metro-config').MetroConfig}
  */
-const defaultConfig = getDefaultConfig(__dirname);
+const defaultConfig = getDefaultConfig(new URL('.', import.meta.url).pathname);
 
 const config = {
   resolver: {
-    sourceExts: [...defaultConfig.resolver.sourceExts, 'tsx', 'ts', 'jsx', 'js'], // Add extensions
+    sourceExts: [...defaultConfig.resolver.sourceExts, 'tsx', 'ts', 'jsx', 'js'], // Ensure TS and TSX files are recognized
   },
   transformer: {
     babelTransformerPath: require.resolve('react-native-svg-transformer'),
   },
-  entryFile: 'index.tsx', // Ensure index.tsx is recognized as the entry file
 };
 
-module.exports = mergeConfig(defaultConfig, config);
+export default mergeConfig(defaultConfig, config);
