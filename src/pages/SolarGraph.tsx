@@ -24,18 +24,15 @@ const SolarGraphPage: React.FC = () => {
         return <Text style={styles.errorText}>Failed to load solar data.</Text>;
     }
 
-    const labels = solarData.map((data: SolarData) => new Date(data.timestamp).toLocaleDateString());
-    const batteryVoltages = solarData.map((data: SolarData) => data.batteryVoltage);
+    // Function to downsample the data
+    const downsampleData = (data: SolarData[], factor: number) => {
+        return data.filter((_, index) => index % factor === 0);
+    };
 
-    // Handle edge cases: ensure no Infinity, NaN, or empty arrays
-    const safeBatteryVoltages = batteryVoltages.map(v => Number.isFinite(v) ? v : 0);
-    const safeLabels = labels.length > 0 ? labels : ["No Data"];
-
-    const testLabels = ["Label1", "Label2", "Label3"];
-    const testData = [28.0, 28.5, 29.0];
-
-    const partialLabels = labels.slice(0, 10); // Start with a small subset
-    const partialData = batteryVoltages.slice(0, 10);
+    // Adjust the factor to control how much you want to downsample
+    const downsampledData = downsampleData(solarData, 5);
+    const labels = downsampledData.map((data: SolarData) => new Date(data.timestamp).toLocaleDateString());
+    const batteryVoltages = downsampledData.map((data: SolarData) => data.batteryVoltage);
 
     return (
         <View style={styles.container}>
