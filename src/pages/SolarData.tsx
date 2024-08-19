@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { View, Text, ActivityIndicator, StyleSheet, Button } from 'react-native';
+import { View, Text, ActivityIndicator, StyleSheet, Button, ScrollView } from 'react-native';
 import { useAppDispatch, useAppSelector } from '../hooks';
 import { fetchSensorData } from '../features/sensorSlice';
 import Svg, { Circle as SvgCircle } from 'react-native-svg';
@@ -66,17 +66,42 @@ const SolarDataPage: React.FC<SolarDataPageProps> = ({ navigation }) => {
         <Text style={styles.gaugeText}>{batteryPercentage.toFixed(2)}%</Text>
       </View>
 
-
-      <Text>Battery Voltage: {sensorData.batteryVoltage} V</Text>
-      <Text>Battery Current: {sensorData.batteryCurrent} A</Text>
-      <Text>Solar Panel 1 Voltage: {sensorData.solarPanel1Voltage} V</Text>
-      <Text>Solar Panel 1 Current: {sensorData.solarPanel1Current} A</Text>
-      <Text>Solar Panel 1 Power: {sensorData.solarPanel1Power} W</Text>
-      <Text>Total Power of Solar Panels: {sensorData.totalPowerOfSolarPanels} W</Text>
-      <Text>Total Charging Power: {sensorData.totalChargingPower} W</Text>
-      <Text>Solar Panel 2 Voltage: {sensorData.solarPanel2Voltage ?? 'N/A'} V</Text>
-      <Text>Solar Panel 2 Current: {sensorData.solarPanel2Current ?? 'N/A'} A</Text>
-      <Text>Solar Panel 2 Power: {sensorData.solarPanel2Power ?? 'N/A'} W</Text>
+      <ScrollView contentContainerStyle={styles.scrollView}>
+        <Text>Battery Voltage: {sensorData.batteryVoltage} V</Text>
+        <Text>Battery Current: {sensorData.batteryCurrent} A</Text>
+        <Text>Solar Panel 1 Voltage: {sensorData.solarPanel1Voltage} V</Text>
+        <Text>Solar Panel 1 Current: {sensorData.solarPanel1Current} A</Text>
+        <Text>Solar Panel 1 Power: {sensorData.solarPanel1Power} W</Text>
+        <Text>Total Power of Solar Panels: {sensorData.totalPowerOfSolarPanels} W</Text>
+        <Text>Total Charging Power: {sensorData.totalChargingPower} W</Text>
+        <Text>Solar Panel 2 Voltage: {sensorData.solarPanel2Voltage ?? 'N/A'} V</Text>
+        <Text>Solar Panel 2 Current: {sensorData.solarPanel2Current ?? 'N/A'} A</Text>
+        <Text>Solar Panel 2 Power: {sensorData.solarPanel2Power ?? 'N/A'} W</Text>
+        <Text>Controller Battery Temperature: {sensorData.controllerBatteryTemperature ?? 'N/A'} °C</Text>
+        <Text>Charging Upper Limit Temperature: {sensorData.chargingUpperLimitTemperature ?? 'N/A'} °C</Text>
+        <Text>Charging Lower Limit Temperature: {sensorData.chargingLowerLimitTemperature ?? 'N/A'} °C</Text>
+        <Text>Heat Sink A Temperature: {sensorData.heatSinkATemperature ?? 'N/A'} °C</Text>
+        <Text>Heat Sink B Temperature: {sensorData.heatSinkBTemperature ?? 'N/A'} °C</Text>
+        <Text>Heat Sink C Temperature: {sensorData.heatSinkCTemperature ?? 'N/A'} °C</Text>
+        <Text>Ambient Temperature: {sensorData.ambientTemperature ?? 'N/A'} °C</Text>
+        <Text>Over Discharge Voltage: {sensorData.overDischargeVoltage ?? 'N/A'} V</Text>
+        <Text>Discharge Limiting Voltage: {sensorData.dischargeLimitingVoltage ?? 'N/A'} V</Text>
+        <Text>Stop Charging Current: {sensorData.stopChargingCurrent ?? 'N/A'} A</Text>
+        <Text>Stop Charging Capacity SOC: {sensorData.stopChargingCapacitySOC ?? 'N/A'} %</Text>
+        <Text>Immediate Equalization Charge Command: {sensorData.immediateEqualizationChargeCommand ?? 'N/A'}</Text>
+        <Text>Load Voltage: {sensorData.loadVoltage ?? 'N/A'} V</Text>
+        <Text>Load Current: {sensorData.loadCurrent ?? 'N/A'} A</Text>
+        <Text>Load Power: {sensorData.loadPower ?? 'N/A'} W</Text>
+        <Text>Battery SOC: {sensorData.batterySOC ?? 'N/A'} %</Text>
+        <Text>Grid A Phase Voltage: {sensorData.gridAPhaseVoltage ?? 'N/A'} V</Text>
+        <Text>Grid A Phase Current: {sensorData.gridAPhaseCurrent ?? 'N/A'} A</Text>
+        <Text>Grid Frequency: {sensorData.gridFrequency ?? 'N/A'} Hz</Text>
+        <Text>Inverter Phase A Voltage: {sensorData.inverterPhaseAVoltage ?? 'N/A'} V</Text>
+        <Text>Inverter Phase A Current: {sensorData.inverterPhaseACurrent ?? 'N/A'} A</Text>
+        <Text>Inverter Frequency: {sensorData.inverterFrequency ?? 'N/A'} Hz</Text>
+        <Text>PV Charging Current: {sensorData.pvChargingCurrent ?? 'N/A'} A</Text>
+        {/* <Text>Errors: {sensorData.errors.length > 0 ? sensorData.errors.join(', ') : 'No errors'}</Text> */}
+      </ScrollView>
 
       <Button title="Go Back" onPress={() => navigation.goBack()} />
     </View>
@@ -110,7 +135,10 @@ const calculateBatteryPercentage = (voltage: number, batteryBankVoltage: number,
 
 const styles = StyleSheet.create({
   container: {
-    padding: 20,
+    flex: 1,  // Ensures the container takes up the full available space
+  },
+  scrollView: {
+    padding: 10,
   },
   title: {
     fontSize: 24,

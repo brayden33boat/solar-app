@@ -39,6 +39,30 @@ export interface SensorData {
     solarPanel2Voltage: number | null;
     solarPanel2Current: number | null;
     solarPanel2Power: number | null;
+    controllerBatteryTemperature: number | null;
+    chargingUpperLimitTemperature: number | null;
+    chargingLowerLimitTemperature: number | null;
+    heatSinkATemperature: number | null;
+    heatSinkBTemperature: number | null;
+    heatSinkCTemperature: number | null;
+    ambientTemperature: number | null;
+    overDischargeVoltage: number | null;
+    dischargeLimitingVoltage: number | null;
+    stopChargingCurrent: number | null;
+    stopChargingCapacitySOC: number | null;
+    immediateEqualizationChargeCommand: number | null;
+    loadVoltage: number | null;
+    loadCurrent: number | null;
+    loadPower: number | null;
+    batterySOC: number | null;
+    gridAPhaseVoltage: number | null;
+    gridAPhaseCurrent: number | null;
+    gridFrequency: number | null;
+    inverterPhaseAVoltage: number | null;
+    inverterPhaseACurrent: number | null;
+    inverterFrequency: number | null;
+    pvChargingCurrent: number | null;
+    errors: string[];  // Assuming errors are returned as an array of strings
     [key: string]: any;  // Allows for additional properties that might be returned
 }
 

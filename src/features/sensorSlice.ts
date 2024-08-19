@@ -32,13 +32,26 @@ const mapSensorData = (data: any): SensorData => ({
     stopChargingCurrent: data["stop_charging_current"],
     stopChargingCapacitySOC: data["stop_charging_capacity"],
     immediateEqualizationChargeCommand: data["immediate_equalization_charge_command"],
+    loadVoltage: data["load_voltage"], // New field
+    loadCurrent: data["load_current"], // New field
+    loadPower: data["load_power"], // New field
+    batterySOC: data["battery_soc"], // New field
+    gridAPhaseVoltage: data["grid_a_phase_voltage"], // New field
+    gridAPhaseCurrent: data["grid_a_phase_current"], // New field
+    gridFrequency: data["grid_frequency"], // New field
+    inverterPhaseAVoltage: data["inverter_phase_a_voltage"], // New field
+    inverterPhaseACurrent: data["inverter_phase_a_current"], // New field
+    inverterFrequency: data["inverter_frequency"], // New field
+    pvChargingCurrent: data["pv_charging_current"], // New field
     errors: data["errors"] || [], // Handle errors array
 });
+
 
 // Async thunk for fetching sensor data
 export const fetchSensorData = createAsyncThunk('sensor/fetchSensorData', async () => {
     const response = await axios.get('http://192.168.12.62:3000/solar-data');
     const mappedData = mapSensorData(response.data);
+    console.log("mappedData", mappedData);
     return mappedData;
 });
 
