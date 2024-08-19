@@ -2,8 +2,8 @@ import React, { useEffect } from 'react';
 import { View, Text, ActivityIndicator, StyleSheet, Button } from 'react-native';
 import { useAppDispatch, useAppSelector } from '../hooks';
 import { fetchSensorData } from '../features/sensorSlice';
+import Svg, { Circle as SvgCircle } from 'react-native-svg';
 import { SensorData, SolarDataScreenNavigationProp } from '../types';
-import { Circle } from 'react-native-svg-circular-progress';
 
 type SolarDataPageProps = {
   navigation: SolarDataScreenNavigationProp;
@@ -42,23 +42,30 @@ const SolarDataPage: React.FC<SolarDataPageProps> = ({ navigation }) => {
 
   // Calculate battery percentage
   const batteryPercentage = calculateBatteryPercentage(sensorData.batteryVoltage, batteryBankVoltage, batteryType);
+  const progress = batteryPercentage / 100;
+  const radius = 45;
+  const circumference = 2 * Math.PI * radius;
 
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Sensor Data</Text>
+
       <View style={styles.gaugeContainer}>
-        <Circle
-          size={200}
-          progress={batteryPercentage / 100}
-          strokeWidth={15}
-          color="#00e0ff"
-          backgroundColor="#3d5875"
-        >
-          {() => (
-            <Text style={styles.gaugeText}>{batteryPercentage.toFixed(2)}%</Text>
-          )}
-        </Circle>
+        <Svg height="200" width="200" viewBox="0 0 100 100">
+          <SvgCircle
+            cx="50"
+            cy="50"
+            r={radius}
+            stroke="blue"
+            strokeWidth="10"
+            fill="none"
+            strokeDasharray={circumference}
+            strokeDashoffset={(1 - progress) * circumference}
+          />
+        </Svg>
+        <Text style={styles.gaugeText}>{batteryPercentage.toFixed(2)}%</Text>
       </View>
+
 
       <Text>Battery Voltage: {sensorData.batteryVoltage} V</Text>
       <Text>Battery Current: {sensorData.batteryCurrent} A</Text>
@@ -79,19 +86,27 @@ const SolarDataPage: React.FC<SolarDataPageProps> = ({ navigation }) => {
 const calculateBatteryPercentage = (voltage: number, batteryBankVoltage: number, batteryType: string) => {
   let minVoltage, maxVoltage;
 
-  if (batteryType === "1") { // Lithium
+  if (batteryType === "Lithium") { // Lithium
     maxVoltage = batteryBankVoltage * (28.8 / 24);
     minVoltage = batteryBankVoltage * (21.0 / 24);
-  } else if (batteryType === "2") { // AGM
+  } else if (batteryType === "AGM") { // AGM
     maxVoltage = batteryBankVoltage * (25.6 / 24);
     minVoltage = batteryBankVoltage * (21.0 / 24);
   } else {
+    console.log('Unknown battery type:', batteryType);
     return 0;
   }
 
+  console.log('Voltage:', voltage);
+  console.log('Min Voltage:', minVoltage);
+  console.log('Max Voltage:', maxVoltage);
+
   const percentage = ((voltage - minVoltage) / (maxVoltage - minVoltage)) * 100;
+  console.log('Calculated Percentage:', percentage);
+
   return Math.max(0, Math.min(100, percentage));
 };
+
 
 const styles = StyleSheet.create({
   container: {
@@ -103,13 +118,18 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   gaugeContainer: {
+    justifyContent: 'center',
     alignItems: 'center',
-    marginBottom: 20,
+    position: 'relative', // Ensure the Text is positioned relative to the Svg
   },
   gaugeText: {
-    fontSize: 24,
-    fontWeight: 'bold',
+    position: 'absolute',
+    top: '55%',
+    left: '55%',
+    transform: [{ translateX: -50 }, { translateY: -50 }], // Center the text
     textAlign: 'center',
+    fontSize: 20, // Adjust the font size as needed
+    fontWeight: 'bold', // Optional: Makes the text bold
   },
   errorText: {
     color: 'red',
