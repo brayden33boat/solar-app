@@ -7,6 +7,7 @@ import { Button, View, Text } from 'react-native';
 import SolarDataPage from './src/pages/SolarData';
 import SolarGraphPage from './src/pages/SolarGraph';
 import { HomeScreenNavigationProp } from './src/types';
+import Settings from './src/pages/Settings';
 
 const Stack = createStackNavigator();
 
@@ -25,6 +26,10 @@ const HomeScreen: React.FC<HomeScreenProps> = ({ navigation }) => (
       title="Go to Solar Graph"
       onPress={() => navigation.navigate('SolarGraph')}
     />
+    <Button
+      title="Go to Settings"
+      onPress={() => navigation.navigate('Settings')}
+    />
   </View>
 );
 
@@ -35,6 +40,7 @@ const App: React.FC = () => {
         <Stack.Screen name="Home" component={HomeScreen} />
         <Stack.Screen name="SolarData" component={SolarDataPage} />
         <Stack.Screen name="SolarGraph" component={SolarGraphPage} />
+        <Stack.Screen name="Settings" component={Settings} />
       </Stack.Navigator>
     </NavigationContainer>
   );

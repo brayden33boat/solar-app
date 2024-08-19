@@ -3,11 +3,13 @@
 import { configureStore } from '@reduxjs/toolkit';
 import sensorReducer from './features/sensorSlice';
 import solarDataReducer from './features/solarDataSlice';
+import settingsReducer from './features/settingsSlice';
 
 export const store = configureStore({
   reducer: {
     sensor: sensorReducer,
-    solarData: solarDataReducer,  // Ensure this line is included
+    solarData: solarDataReducer,
+    settings: settingsReducer,
   },
 });
 

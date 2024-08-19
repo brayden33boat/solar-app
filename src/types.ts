@@ -8,6 +8,7 @@ export type RootStackParamList = {
     Home: undefined;
     SolarData: undefined;
     SolarGraph: undefined;
+    Settings: undefined;
 };
 
 export type HomeScreenNavigationProp = StackNavigationProp<
@@ -58,4 +59,11 @@ export interface SolarDataState {
     data: SolarData[];
     status: 'idle' | 'loading' | 'succeeded' | 'failed';
     error: string | null;
+}
+
+export interface SettingsState {
+    batteryVoltage: string;
+    batteryAhms: string;
+    batteryType: string;
+    shutOffTemp: string;
 }
