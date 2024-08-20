@@ -61,7 +61,7 @@ const DashboardPage: React.FC<SolarDataPageProps> = ({ navigation }) => {
             timestamp: new Date(hour),
             batteryVoltage: avgBatteryVoltage !== undefined ? avgBatteryVoltage : 0,
         };
-    }).sort((a, b) => a.timestamp - b.timestamp);  // Sort the data by timestamp
+    }).sort((a:any, b:any) => a.timestamp - b.timestamp);  // Sort the data by timestamp
 
     // Ensure that all data points are valid numbers
     const filteredData = downsampledData.filter(data => !isNaN(data.batteryVoltage));
