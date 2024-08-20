@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { View, Text, StyleSheet, Dimensions } from 'react-native';
+import { View, Text, StyleSheet, Dimensions, ScrollView } from 'react-native';
 import { LineChart } from 'react-native-chart-kit';
 import { useAppSelector, useAppDispatch } from '../hooks';
 import { calculateBatteryPercentage } from '../utils';
@@ -70,7 +70,7 @@ const DashboardPage: React.FC<SolarDataPageProps> = ({ navigation }) => {
             timestamp: new Date(hour),
             batteryVoltage: avgBatteryVoltage !== undefined ? avgBatteryVoltage : 0,
         };
-    }).sort((a:any, b:any) => a.timestamp - b.timestamp);  // Sort the data by timestamp
+    }).sort((a: any, b: any) => a.timestamp - b.timestamp);  // Sort the data by timestamp
 
     // Filter the weekly charging power data to only include the last 12 hours
     const recentWeeklyChargingPower = weeklyChargingPower.filter(data => new Date(data.timestamp) >= twelveHoursAgo);
@@ -88,7 +88,7 @@ const DashboardPage: React.FC<SolarDataPageProps> = ({ navigation }) => {
             timestamp: new Date(hour),
             totalChargingPower: avgChargingPower !== undefined ? avgChargingPower : 0,
         };
-    }).sort((a:any, b:any) => a.timestamp - b.timestamp);  // Sort the data by timestamp
+    }).sort((a: any, b: any) => a.timestamp - b.timestamp);  // Sort the data by timestamp
 
     // Prepare the solar data for the line chart
     const solarChartData = {
@@ -128,73 +128,75 @@ const DashboardPage: React.FC<SolarDataPageProps> = ({ navigation }) => {
                 </View>
                 <View style={styles.item}>
                     <Text style={styles.label}>Battery Percentage</Text>
-                    <Text style={styles.value}>{batteryPercentage}%</Text>
+                    <Text style={styles.value}>{batteryPercentage.toFixed(2)}%</Text>
                 </View>
             </View>
-            <Text style={styles.title2}>Voltage</Text>
-            <LineChart
-                data={solarChartData}
-                width={Dimensions.get('window').width - 40} // from react-native
-                height={220}
-                yAxisLabel=""
-                yAxisSuffix="V"
-                chartConfig={{
-                    backgroundColor: '#e26a00',
-                    backgroundGradientFrom: '#fb8c00',
-                    backgroundGradientTo: '#ffa726',
-                    decimalPlaces: 2, // Optional: defaults to 2dp
-                    color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
-                    labelColor: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
-                    style: {
+            <ScrollView contentContainerStyle={styles.scrollView}>
+                <Text style={styles.title2}>Voltage</Text>
+                <LineChart
+                    data={solarChartData}
+                    width={Dimensions.get('window').width - 40} // from react-native
+                    height={220}
+                    yAxisLabel=""
+                    yAxisSuffix="V"
+                    chartConfig={{
+                        backgroundColor: '#e26a00',
+                        backgroundGradientFrom: '#fb8c00',
+                        backgroundGradientTo: '#ffa726',
+                        decimalPlaces: 2, // Optional: defaults to 2dp
+                        color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
+                        labelColor: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
+                        style: {
+                            borderRadius: 16,
+                        },
+                        propsForDots: {
+                            r: '6',
+                            strokeWidth: '2',
+                            stroke: '#ffa726',
+                        },
+                        propsForLabels: {
+                            rotation: 30, // Rotate labels by 30 degrees
+                        },
+                    }}
+                    bezier // Optional: Smooth curve effect
+                    style={{
+                        marginVertical: 8,
                         borderRadius: 16,
-                    },
-                    propsForDots: {
-                        r: '6',
-                        strokeWidth: '2',
-                        stroke: '#ffa726',
-                    },
-                    propsForLabels: {
-                        rotation: 30, // Rotate labels by 30 degrees
-                    },
-                }}
-                bezier // Optional: Smooth curve effect
-                style={{
-                    marginVertical: 8,
-                    borderRadius: 16,
-                }}
-            />
-            <Text style={styles.title2}>Charging Power</Text>
-            <LineChart
-                data={weeklyChargingPowerChartData}
-                width={Dimensions.get('window').width - 40} // from react-native
-                height={220}
-                yAxisLabel=""
-                yAxisSuffix="W"
-                chartConfig={{
-                    backgroundColor: '#007ACC',
-                    backgroundGradientFrom: '#00A1FF',
-                    backgroundGradientTo: '#00CCFF',
-                    decimalPlaces: 2, // Optional: defaults to 2dp
-                    color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
-                    labelColor: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
-                    style: {
+                    }}
+                />
+                <Text style={styles.title2}>Charging Power</Text>
+                <LineChart
+                    data={weeklyChargingPowerChartData}
+                    width={Dimensions.get('window').width - 40} // from react-native
+                    height={220}
+                    yAxisLabel=""
+                    yAxisSuffix="W"
+                    chartConfig={{
+                        backgroundColor: '#007ACC',
+                        backgroundGradientFrom: '#00A1FF',
+                        backgroundGradientTo: '#00CCFF',
+                        decimalPlaces: 2, // Optional: defaults to 2dp
+                        color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
+                        labelColor: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
+                        style: {
+                            borderRadius: 16,
+                        },
+                        propsForDots: {
+                            r: '6',
+                            strokeWidth: '2',
+                            stroke: '#00CCFF',
+                        },
+                        propsForLabels: {
+                            rotation: 30, // Rotate labels by 30 degrees
+                        },
+                    }}
+                    bezier // Optional: Smooth curve effect
+                    style={{
+                        marginVertical: 8,
                         borderRadius: 16,
-                    },
-                    propsForDots: {
-                        r: '6',
-                        strokeWidth: '2',
-                        stroke: '#00CCFF',
-                    },
-                    propsForLabels: {
-                        rotation: 30, // Rotate labels by 30 degrees
-                    },
-                }}
-                bezier // Optional: Smooth curve effect
-                style={{
-                    marginVertical: 8,
-                    borderRadius: 16,
-                }}
-            />
+                    }}
+                />
+            </ScrollView>
         </View>
     );
 };
@@ -251,6 +253,9 @@ const styles = StyleSheet.create({
         color: 'red',
         textAlign: 'center',
         marginTop: 20,
+    },
+    scrollView: {
+        paddingVertical: 10,
     },
 });
 
