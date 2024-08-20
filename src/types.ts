@@ -9,6 +9,7 @@ export type RootStackParamList = {
     SolarData: undefined;
     SolarGraph: undefined;
     Settings: undefined;
+    Dashboard: undefined;
 };
 
 export type HomeScreenNavigationProp = StackNavigationProp<
@@ -19,6 +20,11 @@ export type HomeScreenNavigationProp = StackNavigationProp<
 export type SolarDataScreenNavigationProp = StackNavigationProp<
     RootStackParamList,
     'SolarData'
+>;
+
+export type DashboardScreenNavigationProp = StackNavigationProp<
+    RootStackParamList,
+    'Dashboard'
 >;
 
 export type SolarGraphScreenNavigationProp = StackNavigationProp<
