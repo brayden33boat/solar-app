@@ -97,3 +97,15 @@ export interface SettingsState {
     batteryType: string;
     shutOffTemp: number;
 }
+
+export interface TotalChargingPowerData {
+    totalChargingPower: number;
+    timestamp: string;
+}
+
+export interface TotalChargingPowerState {
+    data: TotalChargingPowerData[];
+    status: 'idle' | 'loading' | 'succeeded' | 'failed';
+    error: string | null;
+}
+

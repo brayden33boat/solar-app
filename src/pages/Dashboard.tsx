@@ -3,10 +3,11 @@ import { View, Text, StyleSheet, Dimensions } from 'react-native';
 import { LineChart } from 'react-native-chart-kit';
 import { useAppSelector, useAppDispatch } from '../hooks';
 import { calculateBatteryPercentage } from '../utils';
-import { SolarData } from '../types';
+import { SolarData, TotalChargingPowerData } from '../types';
 import { groupBy, meanBy } from 'lodash';
 import { fetchSolarData } from '../features/solarDataSlice';
 import { fetchSensorData } from '../features/sensorSlice';
+import { fetchTotalChargingPower } from '../features/weeklyChargingPowerSlice';
 
 type SolarDataPageProps = {
     navigation: any;
@@ -19,6 +20,8 @@ const DashboardPage: React.FC<SolarDataPageProps> = ({ navigation }) => {
     const solarData = useAppSelector((state) => state.solarData.data as SolarData[]);
     const solarDataStatus = useAppSelector((state) => state.solarData.status);
     const sensorDataStatus = useAppSelector((state) => state.sensor.status);
+    const weeklyChargingPowerStatus = useAppSelector((state) => state.weeklyChargePower.status);
+    const weeklyChargingPower = useAppSelector((state) => state.weeklyChargePower.data as TotalChargingPowerData[]);
 
     useEffect(() => {
         if (solarDataStatus === 'idle') {
@@ -32,7 +35,13 @@ const DashboardPage: React.FC<SolarDataPageProps> = ({ navigation }) => {
         }
     }, [sensorDataStatus, dispatch]);
 
-    if (solarDataStatus !== 'succeeded' || sensorDataStatus !== 'succeeded') {
+    useEffect(() => {
+        if (weeklyChargingPowerStatus === 'idle') {
+            dispatch(fetchTotalChargingPower());
+        }
+    }, [weeklyChargingPowerStatus, dispatch]);
+
+    if (solarDataStatus !== 'succeeded' || sensorDataStatus !== 'succeeded' || weeklyChargingPowerStatus !== 'succeeded') {
         return <Text style={styles.errorText}>Loading data...</Text>;
     }
 
@@ -42,20 +51,20 @@ const DashboardPage: React.FC<SolarDataPageProps> = ({ navigation }) => {
 
     const batteryPercentage = Math.round(calculateBatteryPercentage(sensorData.batteryVoltage, batteryBankVoltage, batteryType));
 
-    // Filter the data to only include the last 12 hours
+    // Filter the solar data to only include the last 12 hours
     const twelveHoursAgo = new Date();
     twelveHoursAgo.setHours(twelveHoursAgo.getHours() - 12);
 
-    const recentData = solarData.filter(data => new Date(data.timestamp) >= twelveHoursAgo);
+    const recentSolarData = solarData.filter(data => new Date(data.timestamp) >= twelveHoursAgo);
 
-    // Group and downsample the data by hour
-    const groupedData = groupBy(recentData, (data) => {
+    // Group and downsample the solar data by hour
+    const groupedSolarData = groupBy(recentSolarData, (data) => {
         const date = new Date(data.timestamp);
         return `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()} ${date.getHours()}:00`;
     });
 
-    const downsampledData = Object.keys(groupedData).map((hour) => {
-        const dataForHour = groupedData[hour];
+    const downsampledSolarData = Object.keys(groupedSolarData).map((hour) => {
+        const dataForHour = groupedSolarData[hour];
         const avgBatteryVoltage = meanBy(dataForHour, 'batteryVoltage');
         return {
             timestamp: new Date(hour),
@@ -63,16 +72,43 @@ const DashboardPage: React.FC<SolarDataPageProps> = ({ navigation }) => {
         };
     }).sort((a:any, b:any) => a.timestamp - b.timestamp);  // Sort the data by timestamp
 
-    // Ensure that all data points are valid numbers
-    const filteredData = downsampledData.filter(data => !isNaN(data.batteryVoltage));
+    // Filter the weekly charging power data to only include the last 12 hours
+    const recentWeeklyChargingPower = weeklyChargingPower.filter(data => new Date(data.timestamp) >= twelveHoursAgo);
 
-    // Prepare the data for the line chart
-    const chartData = {
-        labels: filteredData.map(data => data.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })),
+    // Group and downsample the weekly charging power data by hour
+    const groupedWeeklyChargingPower = groupBy(recentWeeklyChargingPower, (data) => {
+        const date = new Date(data.timestamp);
+        return `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()} ${date.getHours()}:00`;
+    });
+
+    const downsampledWeeklyChargingPower = Object.keys(groupedWeeklyChargingPower).map((hour) => {
+        const dataForHour = groupedWeeklyChargingPower[hour];
+        const avgChargingPower = meanBy(dataForHour, 'totalChargingPower');
+        return {
+            timestamp: new Date(hour),
+            totalChargingPower: avgChargingPower !== undefined ? avgChargingPower : 0,
+        };
+    }).sort((a:any, b:any) => a.timestamp - b.timestamp);  // Sort the data by timestamp
+
+    // Prepare the solar data for the line chart
+    const solarChartData = {
+        labels: downsampledSolarData.map(data => data.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })),
         datasets: [
             {
-                data: filteredData.map(data => data.batteryVoltage),
+                data: downsampledSolarData.map(data => data.batteryVoltage),
                 color: (opacity = 1) => `rgba(134, 65, 244, ${opacity})`, // Optional: color of the line
+                strokeWidth: 2, // Optional: thickness of the line
+            },
+        ],
+    };
+
+    // Prepare the weekly charging power data for the line chart
+    const weeklyChargingPowerChartData = {
+        labels: downsampledWeeklyChargingPower.map(data => data.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })),
+        datasets: [
+            {
+                data: downsampledWeeklyChargingPower.map(data => data.totalChargingPower),
+                color: (opacity = 1) => `rgba(75, 192, 192, ${opacity})`, // Optional: color of the line
                 strokeWidth: 2, // Optional: thickness of the line
             },
         ],
@@ -95,8 +131,9 @@ const DashboardPage: React.FC<SolarDataPageProps> = ({ navigation }) => {
                     <Text style={styles.value}>{batteryPercentage}%</Text>
                 </View>
             </View>
+            <Text style={styles.title2}>Voltage</Text>
             <LineChart
-                data={chartData}
+                data={solarChartData}
                 width={Dimensions.get('window').width - 40} // from react-native
                 height={220}
                 yAxisLabel=""
@@ -126,6 +163,38 @@ const DashboardPage: React.FC<SolarDataPageProps> = ({ navigation }) => {
                     borderRadius: 16,
                 }}
             />
+            <Text style={styles.title2}>Charging Power</Text>
+            <LineChart
+                data={weeklyChargingPowerChartData}
+                width={Dimensions.get('window').width - 40} // from react-native
+                height={220}
+                yAxisLabel=""
+                yAxisSuffix="W"
+                chartConfig={{
+                    backgroundColor: '#007ACC',
+                    backgroundGradientFrom: '#00A1FF',
+                    backgroundGradientTo: '#00CCFF',
+                    decimalPlaces: 2, // Optional: defaults to 2dp
+                    color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
+                    labelColor: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
+                    style: {
+                        borderRadius: 16,
+                    },
+                    propsForDots: {
+                        r: '6',
+                        strokeWidth: '2',
+                        stroke: '#00CCFF',
+                    },
+                    propsForLabels: {
+                        rotation: 30, // Rotate labels by 30 degrees
+                    },
+                }}
+                bezier // Optional: Smooth curve effect
+                style={{
+                    marginVertical: 8,
+                    borderRadius: 16,
+                }}
+            />
         </View>
     );
 };
@@ -143,6 +212,13 @@ const styles = StyleSheet.create({
         marginBottom: 20,
         color: '#333',
         textAlign: 'center',
+    },
+    title2: {
+        fontSize: 18,
+        fontWeight: 'bold',
+        marginBottom: 0,
+        color: '#333',
+        textAlign: 'left',
     },
     row: {
         flexDirection: 'row',
