@@ -128,7 +128,7 @@ const ControllerSettingsPage: React.FC<ControllerSettingsPageProps> = ({ navigat
             </ScrollView>
 
             <Button mode="contained" onPress={() => navigation.goBack()}>
-                Save & Go Back
+                Go Back
             </Button>
         </View>
     );
