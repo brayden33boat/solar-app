@@ -74,6 +74,7 @@ export interface SensorData {
     inverterPhaseACurrent: number | null;
     inverterFrequency: number | null;
     pvChargingCurrent: number | null;
+    chargeLimitVoltage: number | null;
     errors: string[];  // Assuming errors are returned as an array of strings
     [key: string]: any;  // Allows for additional properties that might be returned
 }

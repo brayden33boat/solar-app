@@ -45,6 +45,7 @@ const mapSensorData = (data: any): SensorData => ({
     pvChargingCurrent: data["pv_charging_current"], // New field
     batteryChargeStatus: data["battery_charge_status"],
     inverterSwitchStatus: data["inverter_switch_status"],
+    chargeLimitVoltage: data["charge_limit_voltage"],
     errors: data["errors"] || [], // Handle errors array
 });
 
