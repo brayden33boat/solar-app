@@ -9,6 +9,7 @@ import SolarGraphPage from './src/pages/SolarGraph';
 import { HomeScreenNavigationProp } from './src/types';
 import Settings from './src/pages/Settings';
 import DashboardPage from './src/pages/Dashboard';
+import ControllerSettingsPage from './src/pages/ControllerSettingsPage';
 
 const Stack = createStackNavigator();
 
@@ -22,6 +23,10 @@ const HomeScreen: React.FC<HomeScreenProps> = ({ navigation }) => (
     <Button
       title="Go to Solar Data"
       onPress={() => navigation.navigate('SolarData')}
+    />
+    <Button
+      title="Go to Controller Settings"
+      onPress={() => navigation.navigate('ControllerSettings')}
     />
     <Button
       title="Go to Solar Graph"
@@ -47,6 +52,7 @@ const App: React.FC = () => {
         <Stack.Screen name="SolarGraph" component={SolarGraphPage} />
         <Stack.Screen name="Dashboard" component={DashboardPage} />
         <Stack.Screen name="Settings" component={Settings} />
+        <Stack.Screen name="ControllerSettings" component={ControllerSettingsPage} />
       </Stack.Navigator>
     </NavigationContainer>
   );

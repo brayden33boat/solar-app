@@ -53,7 +53,7 @@ const mapSensorData = (data: any): SensorData => ({
 export const fetchSensorData = createAsyncThunk('sensor/fetchSensorData', async () => {
     const response = await axios.get('http://192.168.12.62:3000/solar-data');
     const mappedData = mapSensorData(response.data);
-    console.log("mappedData", mappedData);
+    // console.log("mappedData", mappedData);
     return mappedData;
 });
 
@@ -127,7 +127,7 @@ export const setupSocketIO = (dispatch: any) => {
         });
 
         socket.on('solarDataUpdate', (data: any) => {
-            console.log("Data Emitted [solarDataUpdate]:", data);
+            console.log("Data Emitted [solarDataUpdate]");
             try {
                 const mappedData = mapSensorData(data);
                 dispatch(updateSensorData(mappedData));

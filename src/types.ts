@@ -10,11 +10,17 @@ export type RootStackParamList = {
     SolarGraph: undefined;
     Settings: undefined;
     Dashboard: undefined;
+    ControllerSettings: undefined;
 };
 
 export type HomeScreenNavigationProp = StackNavigationProp<
     RootStackParamList,
     'Home'
+>;
+
+export type ControllerSettingsScreenNavigationProp = StackNavigationProp<
+    RootStackParamList,
+    'ControllerSettings'
 >;
 
 export type SolarDataScreenNavigationProp = StackNavigationProp<
@@ -107,5 +113,10 @@ export interface TotalChargingPowerState {
     data: TotalChargingPowerData[];
     status: 'idle' | 'loading' | 'succeeded' | 'failed';
     error: string | null;
+}
+
+export interface CompanySettingsState {
+    batteryChargerStatus: boolean;
+    inverterSwitchStatus: boolean;
 }
 
