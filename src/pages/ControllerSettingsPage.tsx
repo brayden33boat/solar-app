@@ -4,7 +4,7 @@ import { ActivityIndicator, Button, Text, useTheme } from 'react-native-paper';
 import { useAppDispatch, useAppSelector } from '../hooks';
 import { fetchSensorData } from '../features/sensorSlice';
 import { SensorData, ControllerSettingsScreenNavigationProp } from '../types';
-import { setBatteryChargerStatus, setInverterSwitchStatus, setChargeLimitVoltage } from '../features/companySettingsSlice';
+import { setBatteryChargerStatus, setInverterSwitchStatus, setChargeLimitVoltage } from '../features/controllerSettingsSlice';
 import _ from 'lodash';
 import { Picker } from '@react-native-picker/picker';
 
@@ -26,26 +26,7 @@ const ControllerSettingsPage: React.FC<ControllerSettingsPageProps> = ({ navigat
         }
     }, [status, dispatch]);
 
-    if (status === 'loading') {
-        return <ActivityIndicator animating size="large" />;
-    }
-
-    if (status === 'failed') {
-        return (
-            <View style={styles.container}>
-                <Text style={styles.errorText}>Failed to load sensor data.</Text>
-                <Button mode="contained" onPress={() => dispatch(fetchSensorData())}>
-                    Retry
-                </Button>
-            </View>
-        );
-    }
-
-    if (!sensorData) {
-        return <Text style={styles.errorText}>No data available.</Text>;
-    }
-
-    const handleSettingChange = (key: keyof typeof sensorData, value: string | number | boolean) => {
+    const handleSettingChange = (key: keyof SensorData, value: string | number | boolean) => {
         // dispatch(updateSettings({ key, value }));
 
         console.log("key", key, value);
@@ -68,6 +49,27 @@ const ControllerSettingsPage: React.FC<ControllerSettingsPageProps> = ({ navigat
         []
     );
 
+    if (status === 'loading') {
+        return <ActivityIndicator animating size="large" />;
+    }
+
+    if (status === 'failed') {
+        return (
+            <View style={styles.container}>
+                <Text style={styles.errorText}>Failed to load sensor data.</Text>
+                <Button mode="contained" onPress={() => dispatch(fetchSensorData())}>
+                    Retry
+                </Button>
+            </View>
+        );
+    }
+
+    if (!sensorData) {
+        return <Text style={styles.errorText}>No data available.</Text>;
+    }
+
+
+
     return (
         <View style={styles.container}>
             <Text style={styles.title}>Controller Settings</Text>
@@ -86,13 +88,13 @@ const ControllerSettingsPage: React.FC<ControllerSettingsPageProps> = ({ navigat
                     </View>
                 ))} */}
                 {/* Toggle for Battery Charger */}
-                <View style={styles.settingRow}>
+                {/* <View style={styles.settingRow}>
                     <Text style={styles.settingLabel}>Battery Charger:</Text>
                     <Switch
                         value={!!sensorData.batteryChargeStatus}
                         onValueChange={(value) => handleSettingChange('batteryChargerStatus', value)}
                     />
-                </View>
+                </View> */}
 
                 {/* Toggle for Inverter Switch */}
                 <View style={styles.settingRow}>

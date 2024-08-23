@@ -75,6 +75,17 @@ export interface SensorData {
     inverterFrequency: number | null;
     pvChargingCurrent: number | null;
     chargeLimitVoltage: number | null;
+    currentFaultBit: number | null;
+    currentFaultCode: number | null;
+    gridBPhaseVoltage: number | null;
+    gridCPhaseVoltage: number | null;
+    inverterBPhaseVoltage: number | null;
+    inverterCPhaseVoltage: number | null;
+    gridBPhaseCurrent: number | null;
+    gridCPhaseCurrent: number | null;
+    positiveBusVoltage: number | null;
+    negativeBusVoltage: number | null;
+    batteryNominalCapacity: number | null;
     errors: string[];  // Assuming errors are returned as an array of strings
     [key: string]: any;  // Allows for additional properties that might be returned
 }

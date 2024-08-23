@@ -46,6 +46,17 @@ const mapSensorData = (data: any): SensorData => ({
     batteryChargeStatus: data["battery_charge_status"],
     inverterSwitchStatus: data["inverter_switch_status"],
     chargeLimitVoltage: data["charge_limit_voltage"],
+    currentFaultBit: data["current_fault_bit"], // New field
+    currentFaultCode: data["current_fault_code"], // New field
+    gridBPhaseVoltage: data["grid_b_phase_voltage"], // New field
+    gridCPhaseVoltage: data["grid_c_phase_voltage"], // New field
+    inverterBPhaseVoltage: data["inverter_b_phase_voltage"], // New field
+    inverterCPhaseVoltage: data["inverter_c_phase_voltage"], // New field
+    gridBPhaseCurrent: data["grid_b_phase_current"], // New field
+    gridCPhaseCurrent: data["grid_c_phase_current"], // New field
+    positiveBusVoltage: data["positive_bus_voltage"], // New field
+    negativeBusVoltage: data["negative_bus_voltage"], // New field
+    batteryNominalCapacity: data["battery_nominal_capacity"],
     errors: data["errors"] || [], // Handle errors array
 });
 

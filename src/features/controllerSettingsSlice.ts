@@ -8,7 +8,7 @@ const initialState: CompanySettingsState = {
     chargeLimitVoltage: 14.4
 };
 
-const apiEndpoint = 'http://192.168.12.62:3000/solar-set-var/battery_charge_status';
+const apiEndpoint = 'http://192.168.12.62:3000/solar-set-var/';
 
 const companySettingsSlice = createSlice({
     name: 'companySettings',
@@ -32,7 +32,7 @@ const companySettingsSlice = createSlice({
             console.log("setInverterSwitchStatus", action.payload);
 
             // Make API call using axios
-            axios.post(apiEndpoint, { value: action.payload ? 1 : 0 })
+            axios.post(apiEndpoint + "inverter_switch", { value: action.payload ? 1 : 0 })
                 .then(response => {
                     console.log('API response:', response.data);
                 })
@@ -52,7 +52,7 @@ const companySettingsSlice = createSlice({
             }
 
             // Make API call using axios
-            axios.post(apiEndpoint, { value: newVoltage })
+            axios.post(apiEndpoint + "charge_limit_voltage", { value: newVoltage })
                 .then(response => {
                     console.log('API response:', response.data);
                 })

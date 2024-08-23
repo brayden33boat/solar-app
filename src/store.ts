@@ -5,7 +5,7 @@ import sensorReducer from './features/sensorSlice';
 import solarDataReducer from './features/solarDataSlice';
 import settingsReducer from './features/settingsSlice';
 import weeklyChargePowerReducer from './features/weeklyChargingPowerSlice';
-import companySettingsReducer from './features/companySettingsSlice';
+import companySettingsReducer from './features/controllerSettingsSlice';
 
 export const store = configureStore({
   reducer: {
