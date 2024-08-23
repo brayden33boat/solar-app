@@ -1,5 +1,4 @@
 import React, { useEffect } from 'react';
-import { useDispatch } from 'react-redux';
 import { View, ScrollView, StyleSheet, TextInput, Switch } from 'react-native';
 import { ActivityIndicator, Button, Text, useTheme } from 'react-native-paper';
 import { useAppDispatch, useAppSelector } from '../hooks';
@@ -48,7 +47,9 @@ const ControllerSettingsPage: React.FC<ControllerSettingsPageProps> = ({ navigat
         
         switch (key){
             case 'batteryChargerStatus':
+                console.log("Should dispatch")
                 dispatch(setBatteryChargerStatus(!!value));
+                console.log("Done dispatch")
                 break;
             case 'inverterSwitchStatus':
                 dispatch(setInverterSwitchStatus(!!value));
