@@ -119,5 +119,6 @@ export interface TotalChargingPowerState {
 export interface CompanySettingsState {
     batteryChargerStatus: boolean;
     inverterSwitchStatus: boolean;
+    chargeLimitVoltage: number;
 }
 
