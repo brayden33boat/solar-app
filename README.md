@@ -1,4 +1,8 @@
-This is a new [**React Native**](https://reactnative.dev) project, bootstrapped using [`@react-native-community/cli`](https://github.com/react-native-community/cli).
+# Description
+The SolarApp Frontend is a React-based interface specifically for PowMr hybrid inverters. It offers real-time data visualization, system status updates, and customizable alerts. Built with a mobile-first design, it ensures that you can manage your solar setup from any device. This app has been crucial in my off-grid journey, and I'm more than willing to share my experience with others facing similar challenges.
+
+**Note**: This frontend depends on the SolarApp Backend to function properly. Ensure you have both the backend and frontend set up for full functionality.
+https://github.com/brayden33boat/solar-backend
 
 # Getting Started
 
